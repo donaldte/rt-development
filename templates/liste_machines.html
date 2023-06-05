@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+    <h1>Liste des machines</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Utilisateur</th>
+                <th>Description</th>
+                <th>Type de machine</th>
+                <th>Statut</th>
+                <th>Date de création</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for machine in machines %}
+                <tr>
+                    <td>{{ machine.nom }}</td>
+                    <td>{{ machine.utilisateur }}</td>
+                    <td>{{ machine.description }}</td>
+                    <td>{{ machine.get_type_machine_display }}</td>
+                    <td>{{ machine.get_statut_display }}</td>
+                    <td>{{ machine.date_creation }}</td>
+                    <td>
+                       {% if request.user.is_staff %}
+                           <a href="{% url 'modifier_machine' machine.id %}" class="btn btn-warning">Modifier</a>
+                        <a href="{% url 'supprimer_machine' machine.id %}" class="btn btn-danger">Supprimer</a>
+                        {% endif %}
+                        <a href="{% url 'detail_machine' machine.id %}" class="btn btn-primary">Detail</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7">Aucune machine disponible.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if request.user.is_staff %}
+        <a href="{% url 'ajouter_machine' %}" class="btn btn-success">Ajouter une Machine</a>
+    {% endif %}
+</div>
+{% endblock %}

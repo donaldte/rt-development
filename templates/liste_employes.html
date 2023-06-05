@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Liste des employés</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th> Nom Complet</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employe in employes %}
+                    <tr>
+                        <td>{{ employe.user.username }}</td>
+                        <td>{{ employe.user.email }}</td>
+                        <td>{{ employe.user.first_name }} {{ employe.user.last_name }}</td>
+                        <td>{{ employe.role }}</td>
+                        <td>
+                            {% if request.user.is_staff %}
+                            <a href="{% url 'employe_update' employe.id %}" class="btn btn-primary">Modifier</a>
+                            <a href="{% url 'employe_delete' employe.id %}" class="btn btn-danger">Supprimer</a>
+                        {% endif %}
+                        </td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% if request.user.is_staff %}
+                <a href="{% url 'employe_create' %}" class="btn btn-success">Ajouter un employé</a>
+    {% endif %}
+    </div>
+{% endblock %}
